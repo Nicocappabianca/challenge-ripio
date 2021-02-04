@@ -5,11 +5,9 @@ interface FloatingLabelProps {
   className?: string;
   type: string;
   hasError?: boolean;
-  setError?: (value: boolean) => void;
   errorMessage?: string;
-  pattern?: RegExp;
-  setValue?: (value: string | null) => void;
-  value?: string | null;
+  setValue?: any;
+  value?: string | number | null;
 }
 
 const FloatingLabel: FC<FloatingLabelProps> = ({
@@ -18,8 +16,6 @@ const FloatingLabel: FC<FloatingLabelProps> = ({
   type,
   hasError,
   errorMessage,
-  pattern,
-  setError,
   setValue,
   value
 }) => {
@@ -28,10 +24,6 @@ const FloatingLabel: FC<FloatingLabelProps> = ({
       if (setValue) setValue(text);
     } else {
       if (setValue) setValue(null);
-    }
-
-    if (setError && pattern) {
-      setError(!pattern.test(text));
     }
   };
 

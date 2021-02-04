@@ -4,6 +4,7 @@ import { SendForm } from '@/components';
 const SendContainer: FC = () => {
   const totalBalance = 200;
   const currency = 'eth';
+  const fee = Math.random() * (0.003 - 0.002) + 0.002;
 
   return (
     <section className="Send">
@@ -19,7 +20,7 @@ const SendContainer: FC = () => {
           </div>
         </div>
 
-        <SendForm totalBalance={totalBalance} className="send_form" />
+        <SendForm fee={fee} totalBalance={totalBalance} className="send_form" />
       </div>
 
       <style jsx>
@@ -64,7 +65,11 @@ const SendContainer: FC = () => {
             }
 
             :global(.send_form) {
-              width: 50%;
+              width: 100%;
+
+              @media (--large) {
+                width: 50%;
+              }
             }
           }
         `}
