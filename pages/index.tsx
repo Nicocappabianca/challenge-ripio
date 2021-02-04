@@ -1,11 +1,8 @@
 import React, { FC } from 'react';
+import { SendContainer } from '@/containers';
 
-const Home: FC = () => {
-  return (
-    <div>
-      <h1>Send</h1>
-    </div>
-  );
+const Send: FC = () => {
+  return <SendContainer />;
 };
 
-export default Home;
+export default Send;

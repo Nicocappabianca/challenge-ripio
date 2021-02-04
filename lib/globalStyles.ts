@@ -6,6 +6,7 @@ export const globalStyles = css.global`
   :root {
     --black: ${Colors.black.toCSS()};
     --white: ${Colors.white.toCSS()};
+    --dark-gray: ${Colors.darkGray.toCSS()};
 
     /* Fonts */
     /* ubuntu_regular */
@@ -64,8 +65,8 @@ export const globalStyles = css.global`
     text-rendering: optimizeSpeed;
     line-height: 1.5;
     font-family: var(--f-ubuntu-regular);
-    background-color: var(--white);
-    color: var(--black);
+    background-color: var(--dark-gray);
+    color: var(--white);
 
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

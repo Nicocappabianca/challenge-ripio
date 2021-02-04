@@ -2,7 +2,8 @@ import Color from 'color-js';
 
 export const Colors = {
   black: Color('#000000'),
-  white: Color('#ffffff')
+  white: Color('#ffffff'),
+  darkGray: Color('#020202')
 };
 
 export const Media = {
