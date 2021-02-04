@@ -1,5 +1,6 @@
 import React, { FC, useState } from 'react';
 import { SendForm } from '@/components';
+import AnimatedNumber from 'animated-number-react';
 
 const SendContainer: FC = () => {
   const [totalBalance, setTotalBalance] = useState(200);
@@ -15,7 +16,11 @@ const SendContainer: FC = () => {
             <span>
               <img src="/icons/eth.svg" alt="ETH" />
             </span>
-            {totalBalance.toFixed(4)}
+            <AnimatedNumber
+              value={totalBalance}
+              formatValue={(value: number) => value.toFixed(4)}
+              duration={300}
+            />
             <span className="currency">&nbsp;{currency}</span>
           </div>
         </div>
@@ -60,6 +65,7 @@ const SendContainer: FC = () => {
                 .amount {
                   font-size: 42px;
                   font-weight: bold;
+                  min-width: 266px;
 
                   .currency {
                     font-size: 18px;
