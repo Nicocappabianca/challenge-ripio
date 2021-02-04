@@ -51,7 +51,7 @@ const SendForm: FC<SendFormProps> = ({ className, totalBalance, fee, setBalance 
   const handleSend = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    /* --> UNCOMMENT THIS FOR TESTING THE UI <-- 
+    /* --> UNCOMMENT THIS FOR TESTING THE UI WITHOUT API <-- 
     setBalance(totalBalance - amount - fee);
     setTransactions(transactions => [...transactions, { amount: amount, address: address as string}]); 
     return; */
