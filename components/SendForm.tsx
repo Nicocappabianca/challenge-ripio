@@ -54,6 +54,8 @@ const SendForm: FC<SendFormProps> = ({ className, totalBalance, fee, setBalance 
     /* --> UNCOMMENT THIS FOR TESTING THE UI WITHOUT API <-- 
     setBalance(totalBalance - amount - fee);
     setTransactions(transactions => [...transactions, { amount: amount, address: address as string}]); 
+    setAmount(0);
+    setAddress(null);
     return; */
 
     if (address && amount) {
@@ -89,8 +91,6 @@ const SendForm: FC<SendFormProps> = ({ className, totalBalance, fee, setBalance 
     setAmount(0);
     setAddress(null);
   };
-
-  console.log(transactions);
 
   return (
     <form className={`SendForm ${className ? className : ''}`} method="post" onSubmit={handleSend}>
