@@ -32,6 +32,7 @@ const SendContainer: FC = () => {
         {`
           .Send {
             padding-top: 40px;
+            padding-bottom: 40px;
 
             .container {
               max-width: 90%;

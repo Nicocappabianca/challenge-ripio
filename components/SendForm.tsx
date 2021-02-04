@@ -9,6 +9,11 @@ type SendFormProps = {
   fee: number;
 };
 
+type Transaction = {
+  amount: number;
+  address: string;
+};
+
 const SendForm: FC<SendFormProps> = ({ className, totalBalance, fee, setBalance }) => {
   /* address values */
   const [addressError, setAddressError] = useState(false);
@@ -23,6 +28,9 @@ const SendForm: FC<SendFormProps> = ({ className, totalBalance, fee, setBalance 
   const [submitError, setSubmitError] = useState(false);
 
   const [buttonText, setButtonText] = useState('send');
+
+  /* transactions array */
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   useEffect(() => {
     if (amount < 0 || amount > totalBalance - fee || isNaN(amount)) {
@@ -43,10 +51,16 @@ const SendForm: FC<SendFormProps> = ({ className, totalBalance, fee, setBalance 
   const handleSend = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    /* --> UNCOMMENT THIS FOR TESTING THE UI <-- 
+    setBalance(totalBalance - amount - fee);
+    setTransactions(transactions => [...transactions, { amount: amount, address: address as string}]); 
+    return; */
+
     if (address && amount) {
       setProcessingSubmit(true);
       setButtonText('sending...');
       axios
+        /* here should be placed the URL of the real api */
         .post('/api/sendAmount', { address: address, amount: amount })
         .then(() => {
           setProcessingSubmit(false);
@@ -54,6 +68,12 @@ const SendForm: FC<SendFormProps> = ({ className, totalBalance, fee, setBalance 
 
           /* subtract transaction from total balance */
           setBalance(totalBalance - amount - fee);
+
+          /* set the new transaction */
+          setTransactions((transactions) => [
+            ...transactions,
+            { amount: amount, address: address as string }
+          ]);
         })
         .catch(() => {
           setProcessingSubmit(false);
@@ -69,6 +89,8 @@ const SendForm: FC<SendFormProps> = ({ className, totalBalance, fee, setBalance 
     setAmount(0);
     setAddress(null);
   };
+
+  console.log(transactions);
 
   return (
     <form className={`SendForm ${className ? className : ''}`} method="post" onSubmit={handleSend}>
@@ -101,6 +123,20 @@ const SendForm: FC<SendFormProps> = ({ className, totalBalance, fee, setBalance 
         }
       />
 
+      <ul className="transactions_list">
+        {transactions.map((transaction: Transaction, index: number) => (
+          <li key={index} className="transaction">
+            <h4>Transaction #{index + 1}</h4>
+            <p>
+              Amount sent: <b>{transaction.amount} ETH</b>
+            </p>
+            <p>
+              Receiving address: <b>{transaction.address}</b>
+            </p>
+          </li>
+        ))}
+      </ul>
+
       <style jsx>
         {`
           .SendForm {
@@ -125,6 +161,16 @@ const SendForm: FC<SendFormProps> = ({ className, totalBalance, fee, setBalance 
 
               @media (--large) {
                 margin: 20px 0 0 0;
+              }
+            }
+
+            .transactions_list {
+              padding-top: 30px;
+              overflow-x: auto;
+              white-space: nowrap;
+
+              .transaction {
+                padding-top: 15px;
               }
             }
           }
