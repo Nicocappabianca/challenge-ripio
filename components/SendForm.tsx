@@ -1,18 +1,28 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, FormEvent } from 'react';
 import { FloatingLabel, Button } from '@/components';
+import axios from 'axios';
 
 type SendFormProps = {
   className?: string;
   totalBalance: number;
+  setBalance: any;
   fee: number;
 };
 
-const SendForm: FC<SendFormProps> = ({ className, totalBalance, fee }) => {
+const SendForm: FC<SendFormProps> = ({ className, totalBalance, fee, setBalance }) => {
+  /* address values */
   const [addressError, setAddressError] = useState(false);
   const [address, setAddress] = useState<string | null>(null);
 
+  /* amount values */
   const [amountError, setAmountError] = useState(false);
   const [amount, setAmount] = useState<number>(0);
+
+  /* submit values */
+  const [processingSubmit, setProcessingSubmit] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
+
+  const [buttonText, setButtonText] = useState('send');
 
   useEffect(() => {
     if (amount < 0 || amount > totalBalance - fee || isNaN(amount)) {
@@ -30,8 +40,38 @@ const SendForm: FC<SendFormProps> = ({ className, totalBalance, fee }) => {
     }
   }, [address]);
 
+  const handleSend = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (address && amount) {
+      setProcessingSubmit(true);
+      setButtonText('sending...');
+      axios
+        .post('/api/sendAmount', { address: address, amount: amount })
+        .then(() => {
+          setProcessingSubmit(false);
+          setButtonText('send');
+
+          /* subtract transaction from total balance */
+          setBalance(totalBalance - amount - fee);
+        })
+        .catch(() => {
+          setProcessingSubmit(false);
+          setSubmitError(true);
+          setButtonText('¡Error!');
+        });
+    } else {
+      setProcessingSubmit(false);
+      setSubmitError(true);
+      setButtonText('¡Error!');
+    }
+
+    setAmount(0);
+    setAddress(null);
+  };
+
   return (
-    <form className={`SendForm ${className ? className : ''}`} method="post">
+    <form className={`SendForm ${className ? className : ''}`} method="post" onSubmit={handleSend}>
       <FloatingLabel
         type="text"
         className="input-address"
@@ -53,7 +93,13 @@ const SendForm: FC<SendFormProps> = ({ className, totalBalance, fee }) => {
       />
       <p className="fee">Fee: {fee.toFixed(4)}</p>
 
-      <Button label={`Send`} className="send_button" />
+      <Button
+        label={buttonText}
+        className="send_button"
+        disabled={
+          amountError || addressError || !amount || !address || submitError || processingSubmit
+        }
+      />
 
       <style jsx>
         {`

@@ -1,8 +1,8 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { SendForm } from '@/components';
 
 const SendContainer: FC = () => {
-  const totalBalance = 200;
+  const [totalBalance, setTotalBalance] = useState(200);
   const currency = 'eth';
   const fee = Math.random() * (0.003 - 0.002) + 0.002;
 
@@ -20,7 +20,12 @@ const SendContainer: FC = () => {
           </div>
         </div>
 
-        <SendForm fee={fee} totalBalance={totalBalance} className="send_form" />
+        <SendForm
+          fee={fee}
+          totalBalance={totalBalance}
+          setBalance={setTotalBalance}
+          className="send_form"
+        />
       </div>
 
       <style jsx>
