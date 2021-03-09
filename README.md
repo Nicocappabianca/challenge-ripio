@@ -1,4 +1,4 @@
-# Challenge Ripio
+# Challenge Wallet ETH
 
 ## How does it work? :hammer_and_wrench:
 
